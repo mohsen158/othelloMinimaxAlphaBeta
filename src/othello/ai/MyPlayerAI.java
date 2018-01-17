@@ -23,16 +23,16 @@ public class MyPlayerAI extends ReversiAI {
     }
 
 //    public OthelloMove getMove(OthelloState state) {
+    //
+//        moveToMake = minimax(state, this.depth);
+//        //call minimax search to get the move to make
+//
 //        //
 //        // Time the search
 //        //
 //        OthelloMove moveToMake = null; //used to let timer be reachable
-//        long startTime = System.nanoTime();
-//
-//        //call minimax search to get the move to make
-//        moveToMake = minimax(state, this.depth);
-//
-//        long endTime = System.nanoTime();
+//long startTime = System.nanoTime();
+//    long endTime = System.nanoTime();
 //        long duration = ((endTime - startTime) / 1000000);
 //        System.out.println("Minimax took " + duration + " milliseconds.");
 //
@@ -78,15 +78,16 @@ public class MyPlayerAI extends ReversiAI {
             List<Point> moves = generateMoves(state); //generate possible moves for this state
             for (Point move : moves) {
                 Board moveState = this.applyMoveCloning(move, state); //apply move into state clone
-                double s = minValue(moveState, depth - 1, a1);
-                if (s > a1) {
-                    a1 = s;
+                double s = minValue(moveState, depth - 1, pass);
+
+                if (s > pass) {
+                    return 99999999;
+                }else {
+
+                    pass = s;
                 }
-                if (s > bestScore) { //get the maximum value
+                if (s > bestScore) {
                     bestScore = s;
-                }
-                if (bestScore > pass) {
-                    return bestScore;
                 }
             }
             return bestScore;
@@ -110,16 +111,17 @@ public class MyPlayerAI extends ReversiAI {
             List<Point> moves = this.generateMoves(state);
             for (Point move : moves) {
                 Board moveState = this.applyMoveCloning(move, state); //apply move into state clone
-                double s = maxValue(moveState, depth - 1, a1);
-                if (s > a1) {
-                    a1 = s;
+                double s = maxValue(moveState, depth - 1, pass);
+                if (s > pass) {
+                    return -9999999;
+                } else {
+
+                    pass = s;
                 }
                 if (s < bestScore) { //get the minimum value
                     bestScore = s;
                 }
-                if (bestScore < pass) {
-                    return bestScore;
-                }
+
             }
             return bestScore;
         }
@@ -132,7 +134,13 @@ public class MyPlayerAI extends ReversiAI {
 //                if (b.move(i, j))
 //                    return new Point(i, j);
 //        return null;
-        Point t = minimax(b, 7);
+
+
+        long startTime = System.nanoTime();
+        Point t = minimax(b, 6);
+        long endTime = System.nanoTime();
+        long duration = ((endTime - startTime) / 1000000);
+        System.out.println("Minimax took " + duration + " milliseconds.");
         return t;
 		/*{
 			b.isCapturedByMe(x, y);					// square (x, y) is mine
